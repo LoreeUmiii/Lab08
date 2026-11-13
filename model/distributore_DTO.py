@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from database.prezzo_DAO import PrezzoDAO
+from database import prezzo_DAO
+
 
 '''
     DTO (Data Transfer Object) dell'entità Distributore
@@ -16,7 +17,11 @@ class Distributore:
 
     def get_prezzi(self):
         """ Aggiorna e Restituisce la lista di prezzi (self.lista_prezzi) associati al distributore"""
-        # TODO
+
+        # Controllare il warning
+        self.lista_prezzi = prezzo_DAO.PrezzoDAO.get_prezzi(self.id)
+        # print(self.lista_prezzi)
+        return self.lista_prezzi
 
     def __eq__(self, other):
         return isinstance(other, Distributore) and self.id == other.id
