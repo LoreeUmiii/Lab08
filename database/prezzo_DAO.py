@@ -7,7 +7,8 @@ from model.prezzo_DTO import Prezzo
 """
 
 class PrezzoDAO:
-    @staticmethod
+
+    # Problema con la parola staticmethod, guardare il motivo - Funzionante
     def get_prezzi(id_distributore) -> list[Prezzo] | None:
         """
         Restituisce tutti i prezzi di un distributore
