@@ -1,5 +1,6 @@
 from database import distributore_DAO
 from database.distributore_DAO import DistributoreDAO
+from model.distributore_DTO import Distributore
 
 '''
     MODELLO:
@@ -58,6 +59,26 @@ class Model:
         """ Implementa la ricorsione """
         # TODO
 
+        if giorno > 7:
+            if self.__costo_ottimo == -1 or costo_corrente <  self.__costo_ottimo:
+                self.__costo_ottimo = costo_corrente
+                self.__sequenza_ottima = list(sequenza_parziale)
+            return
+
+        for p in prezzi_settimana:
+            costo = prezzi_settimana[p][giorno - 1]*100
+            if ultimo_distributore is not None and ultimo_distributore != p:
+                # Posso evitarlo, passo direttamente id_distributore
+                # ultimo_distributore = id_distributore
+                costo += 5
+            nuovo_costo = costo_corrente + costo
+
+
+            sequenza_parziale.append(p)
+            self.__ricorsione(sequenza_parziale, (giorno + 1), p,
+                                  nuovo_costo, prezzi_settimana)
+            sequenza_parziale.pop()
+
 
 
 
@@ -68,3 +89,16 @@ class Model:
         :return: un dizionario: {id_distributore: [prezzo_giorno1, ..., prezzo_giorno7]}
         """
         # TODO
+
+        prezzi_settimana = {}
+
+        for distributore in self._distributori:
+            prezzi = distributore.get_prezzi()
+            prezzi_giorni = []
+
+            for p in prezzi:
+                if p.data.month == mese and p.data.day <= 7:
+                    prezzi_giorni.append(p.prezzo_litro)
+            prezzi_settimana[distributore.id] = prezzi_giorni
+
+        return prezzi_settimana
